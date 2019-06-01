@@ -1,24 +1,62 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const defaultCount = 0
+
+const Counter = props => {
+  const [count, setCount] = useState(0)
+
+  useEffect( () => {
+    console.log('Mount: ' + count)
+    return () => { console.log('Dismount: ' + count) }
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div>
+      <p>
+        Count: { count }
+      </p>
+      <button onClick={()=>setCount(count+1)}>
+        Add
+      </button>
+      <InnerCount />
+    </div>
+    )
+}
+
+const InnerCount = props => {
+  const [count, setCount] = useState(0)
+
+  useEffect( () => {
+    console.log('Mount Inner: ' + count)
+    return () => console.log('Dismount Inner: ' + count)
+  }, [])
+
+  return (
+    <div>
+      <p>
+        Inner Count: { count }
+      </p>
+      <button onClick={()=>setCount(count+1)}>
+        Add To Inner Count
+      </button>
+    </div>
+    )
+}
+
+
+function App() {
+  const [key, setKey] = useState(0)
+  return (
+    <div className="App" key={key}>
+        <Counter />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Key: {key}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <button onClick={()=>setKey(key+1)}>
+          Reset
+        </button>
     </div>
   );
 }
